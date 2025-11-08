@@ -50,8 +50,8 @@ Built on [Model Context Protocol](https://modelcontextprotocol.io/) and powered 
 Before installing, you need:
 
 1. **Home Assistant** running (any version)
-2. **[HA Cursor Agent](https://github.com/Coolver/home-assistant-cursor-agent)** installed as add-on
-3. **Long-Lived Access Token** from Home Assistant
+2. **[HA Cursor Agent](https://github.com/Coolver/home-assistant-cursor-agent)** v1.0.9+ installed as add-on
+3. **API Key** from HA Cursor Agent (auto-generated on first start)
 4. **Cursor AI** editor installed
 
 ---
@@ -65,15 +65,20 @@ Install the agent in your Home Assistant:
 1. Go to **Settings** → **Add-ons** → **Add-on Store**
 2. Click **⋮** → **Repositories**
 3. Add: `https://github.com/Coolver/home-assistant-cursor-agent`
-4. Install **HA Cursor Agent**
-5. Start the agent
+4. Install **HA Cursor Agent** (v1.0.9+)
+5. **Start** the agent
 
-### Step 2: Get Access Token
+### Step 2: Get API Key
 
-1. In Home Assistant, click your **Profile** (bottom left)
-2. Scroll to **Long-Lived Access Tokens**
-3. Click **CREATE TOKEN**
-4. Name it `Cursor AI` and copy the token
+**Easy way - Use Ingress Panel:**
+1. Look in Home Assistant **Sidebar** → **🔑 API Key** panel appears
+2. Click on **API Key** panel
+3. Click **"Copy to Clipboard"** button
+4. Done! ✅
+
+**Alternative ways:**
+- View in add-on **Logs** (shown on first start)
+- Read file: `/config/.ha_cursor_agent_key`
 
 ### Step 3: Configure Cursor
 
@@ -87,7 +92,7 @@ Add to your `~/.cursor/mcp.json`:
       "args": ["-y", "@coolver/mcp-home-assistant@latest"],
       "env": {
         "HA_AGENT_URL": "http://homeassistant.local:8099",
-        "HA_TOKEN": "YOUR_LONG_LIVED_ACCESS_TOKEN_HERE"
+        "HA_TOKEN": "YOUR_API_KEY_HERE"
       }
     }
   }
