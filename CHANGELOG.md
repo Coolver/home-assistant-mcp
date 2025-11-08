@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-11-08
+
+### Changed
+- **Improved README and descriptions** - Focus on AI-driven system building, not just querying
+- Updated examples to showcase complex automation creation
+- Added real-world use case: Climate Control V3 installation
+- Emphasized AI's ability to analyze and create tailored solutions
+- Updated package description to reflect core value proposition
+
+### Documentation
+- Added `SETUP_AUTOMATION.md` - Step-by-step GitHub Actions setup
+- Added `TOKEN_SETUP_VISUAL.md` - Visual guide for token configuration
+- Better examples showing end-to-end system creation
+
 ## [1.0.0] - 2025-11-08
 
 ### Added
