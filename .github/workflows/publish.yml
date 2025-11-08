@@ -1,13 +1,15 @@
 name: Publish to NPM
 
 on:
+  release:
+    types: [created]
   push:
     tags:
       - 'v*'
 
 permissions:
-  id-token: write  # Required for OIDC trusted publishing
   contents: read
+  id-token: write   # Required for OIDC trusted publishing
 
 jobs:
   publish:
@@ -32,6 +34,8 @@ jobs:
       - name: Build package
         run: npm run build
       
-      - name: Publish to NPM with provenance
-        run: npm publish --access public --provenance
+      - name: Publish to NPM (OIDC)
+        run: npm publish --access public
+        env:
+          NPM_CONFIG_PROVENANCE: true
 
