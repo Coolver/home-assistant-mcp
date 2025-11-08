@@ -141,8 +141,8 @@ export class HAClient {
     return response.data;
   }
 
-  async reloadConfig(): Promise<any> {
-    const response = await this.client.post(`/api/system/reload`);
+  async reloadConfig(component: string = 'all'): Promise<any> {
+    const response = await this.client.post(`/api/system/reload?component=${component}`);
     return response.data;
   }
 

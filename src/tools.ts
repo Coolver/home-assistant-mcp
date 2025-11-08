@@ -241,7 +241,13 @@ export const tools: Tool[] = [
     description: '[WRITE] Reload Home Assistant configuration. APPLIES changes - requires approval!',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        component: {
+          type: 'string',
+          description: 'Component to reload: "automations", "scripts", "templates", "core", or "all" (default: "all")',
+          enum: ['automations', 'scripts', 'templates', 'core', 'all'],
+        },
+      },
     },
   },
   {

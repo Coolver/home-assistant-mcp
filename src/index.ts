@@ -168,7 +168,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
 
       case 'ha_reload_config':
-        result = await haClient.reloadConfig();
+        result = await haClient.reloadConfig(args.component as string);
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
         };
