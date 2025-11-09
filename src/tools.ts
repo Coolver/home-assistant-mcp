@@ -601,7 +601,7 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_apply_dashboard',
-    description: '[WRITE] Apply generated dashboard configuration to Home Assistant. Creates file, auto-registers in configuration.yaml, and reloads config. Creates automatic Git backup. MODIFIES configuration - requires approval!',
+    description: '[WRITE] Apply generated dashboard configuration to Home Assistant. Creates file, auto-registers in configuration.yaml, and restarts HA. Creates automatic Git backup. MODIFIES configuration - requires approval!',
     inputSchema: {
       type: 'object',
       properties: {
@@ -623,6 +623,28 @@ export const tools: Tool[] = [
         },
       },
       required: ['dashboard_config'],
+    },
+  },
+  {
+    name: 'ha_delete_dashboard',
+    description: '[WRITE] Delete dashboard file and remove from configuration.yaml. Restarts Home Assistant. Creates automatic Git backup. DESTRUCTIVE - requires approval!',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        filename: {
+          type: 'string',
+          description: 'Dashboard filename to delete (e.g., ai-dashboard.yaml)',
+        },
+        remove_from_config: {
+          type: 'boolean',
+          description: 'Remove from configuration.yaml (default: true)',
+        },
+        create_backup: {
+          type: 'boolean',
+          description: 'Create Git backup before deleting (default: true)',
+        },
+      },
+      required: ['filename'],
     },
   },
 ];

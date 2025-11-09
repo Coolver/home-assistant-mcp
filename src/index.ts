@@ -379,6 +379,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
         };
 
+      case 'ha_delete_dashboard':
+        result = await haClient.deleteDashboard(
+          args.filename as string,
+          args.remove_from_config !== false,
+          args.create_backup !== false
+        );
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+
       default:
         throw new Error(`Unknown tool: ${name}`);
     }

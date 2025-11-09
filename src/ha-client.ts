@@ -329,5 +329,15 @@ export class HAClient {
     });
     return response.data;
   }
+
+  async deleteDashboard(filename: string, removeFromConfig: boolean = true, createBackup: boolean = true): Promise<any> {
+    const response = await this.client.delete(`/api/lovelace/delete/${filename}`, {
+      params: {
+        remove_from_config: removeFromConfig,
+        create_backup: createBackup
+      }
+    });
+    return response.data;
+  }
 }
 
