@@ -192,6 +192,25 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
         };
 
+      case 'ha_install_hacs':
+        result = await haClient.hacsInstall();
+        break;
+
+      case 'ha_hacs_status':
+        result = await haClient.hacsStatus();
+        break;
+
+      case 'ha_hacs_list_repositories':
+        result = await haClient.hacsListRepositories();
+        break;
+
+      case 'ha_hacs_install_repository':
+        result = await haClient.hacsInstallRepository(
+          args.repository as string,
+          args.category as string
+        );
+        break;
+
       default:
         throw new Error(`Unknown tool: ${name}`);
     }

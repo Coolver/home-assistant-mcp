@@ -29,6 +29,7 @@ Built on [Model Context Protocol](https://modelcontextprotocol.io/) and powered 
 
 ### 🏗️ Build Complex Systems from Scratch
 
+- 💬 *"Install HACS and then install Xiaomi Gateway 3 integration"*
 - 💬 *"Install a smart climate control system for my TRV radiators with predictive shutdown and buffer mode"*
 - 💬 *"Create a presence-based lighting system using my motion sensors and schedule"*
 - 💬 *"Set up energy monitoring with notifications when consumption is high"*
@@ -66,7 +67,7 @@ Built on [Model Context Protocol](https://modelcontextprotocol.io/) and powered 
 Before installing, you need:
 
 1. **Home Assistant** running (any version)
-2. **[HA Cursor Agent](https://github.com/Coolver/home-assistant-cursor-agent)** v2.0.1+ installed as add-on
+2. **[HA Cursor Agent](https://github.com/Coolver/home-assistant-cursor-agent)** v2.1.0+ installed as add-on
 3. **Agent Key** from HA Cursor Agent (auto-generated on first start)
 4. **Cursor AI** editor installed
 
@@ -152,6 +153,33 @@ Just describe what you want in natural language - AI will handle the rest!
 ## 💬 Real-World Examples
 
 Once configured, describe what you want in natural language. Cursor AI will analyze YOUR configuration and create tailored solutions:
+
+### 📦 HACS & Integrations (NEW in v2.1.0!)
+
+```
+Install HACS for me
+```
+
+**AI will:**
+- Check if HACS is already installed
+- Download latest HACS release from GitHub
+- Extract to custom_components/hacs
+- Restart Home Assistant
+- Verify installation
+
+```
+Install HACS and then install Xiaomi Gateway 3 integration
+```
+
+**AI will:**
+- Install HACS (if not already installed)
+- Wait for Home Assistant to restart
+- Search for Xiaomi Gateway 3 in HACS
+- Install the integration
+- Guide you through configuration
+- Create example automations for your Xiaomi devices
+
+**Note:** Repository browsing and installation will be enhanced in the next update with full HACS WebSocket API integration.
 
 ### 🏗️ Install Complete Systems
 
@@ -385,6 +413,13 @@ The MCP server provides these tools to Cursor AI:
 - `ha_git_commit` - Commit changes to git
 - `ha_git_history` - View git history
 - `ha_git_rollback` - Rollback to previous version
+- `ha_git_diff` - Compare commits or view changes
+
+### 📦 HACS
+- `ha_install_hacs` - Install HACS (Home Assistant Community Store)
+- `ha_hacs_status` - Check if HACS is installed
+- `ha_hacs_list_repositories` - List available HACS repositories
+- `ha_hacs_install_repository` - Install integration/theme/plugin from HACS
 
 ---
 

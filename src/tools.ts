@@ -268,6 +268,49 @@ export const tools: Tool[] = [
       },
     },
   },
+  {
+    name: 'ha_install_hacs',
+    description: '[WRITE] Install HACS (Home Assistant Community Store). Downloads latest HACS from GitHub, installs to custom_components, and restarts Home Assistant. Opens access to 1000+ integrations. MODIFIES configuration - requires approval!',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'ha_hacs_status',
+    description: '[READ-ONLY] Check if HACS is installed and get version info. Safe operation - only reads data.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'ha_hacs_list_repositories',
+    description: '[READ-ONLY] List available HACS repositories (integrations, themes, plugins). Requires HACS to be installed and configured. Safe operation - only reads data.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'ha_hacs_install_repository',
+    description: '[WRITE] Install integration/theme/plugin from HACS. Requires HACS to be installed. MODIFIES configuration - requires approval!',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        repository: {
+          type: 'string',
+          description: 'Repository name to install (e.g., "hacs/integration")',
+        },
+        category: {
+          type: 'string',
+          description: 'Repository category: integration, theme, plugin (default: integration)',
+          enum: ['integration', 'theme', 'plugin'],
+        },
+      },
+      required: ['repository'],
+    },
+  },
 ];
 
 

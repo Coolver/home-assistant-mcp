@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2025-11-09
+
+### ✨ NEW: HACS Support
+
+**One-Click HACS Installation via Cursor AI!**
+
+Added MCP tools for HACS:
+- `ha_install_hacs` - Install HACS automatically
+- `ha_hacs_status` - Check if HACS is installed
+- `ha_hacs_list_repositories` - List available integrations/themes
+- `ha_hacs_install_repository` - Install from HACS store
+
+**What this means:**
+- 🎯 No more manual HACS installation!
+- 🤖 Just ask: "Install HACS"
+- 📦 Opens access to 1000+ integrations
+- ✅ AI handles: download → extract → restart → configure
+
+**Example:**
+```
+User: "Install HACS and then install Xiaomi Gateway 3"
+AI: Installs HACS → Installs integration → Creates automations
+```
+
+**Requirements:**
+- HA Cursor Agent v2.1.0+
+
 ## [2.0.0] - 2025-11-08
 
 ### 🚨 BREAKING CHANGES
