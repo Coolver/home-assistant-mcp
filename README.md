@@ -50,7 +50,7 @@ Built on [Model Context Protocol](https://modelcontextprotocol.io/) and powered 
 Before installing, you need:
 
 1. **Home Assistant** running (any version)
-2. **[HA Cursor Agent](https://github.com/Coolver/home-assistant-cursor-agent)** v1.0.11+ installed as add-on
+2. **[HA Cursor Agent](https://github.com/Coolver/home-assistant-cursor-agent)** v1.0.12+ installed as add-on
 3. **API Key** from HA Cursor Agent (auto-generated on first start)
 4. **Cursor AI** editor installed
 
@@ -65,7 +65,7 @@ Install the agent in your Home Assistant:
 1. Go to **Settings** → **Add-ons** → **Add-on Store**
 2. Click **⋮** → **Repositories**
 3. Add: `https://github.com/Coolver/home-assistant-cursor-agent`
-4. Install **HA Cursor Agent** (v1.0.11+)
+4. Install **HA Cursor Agent** (v1.0.12+)
 5. **Start** the agent
 
 ### Step 2: Get API Key
