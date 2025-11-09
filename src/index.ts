@@ -320,6 +320,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return {
           content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
         };
+      
+      case 'ha_list_repositories':
+        result = await haClient.listRepositories();
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
+      
+      case 'ha_add_repository':
+        result = await haClient.addRepository(args.repository_url as string);
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        };
 
       default:
         throw new Error(`Unknown tool: ${name}`);

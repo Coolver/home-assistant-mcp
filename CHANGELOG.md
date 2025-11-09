@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.1] - 2025-11-09
+
+### 🔧 Feature: Repository Management
+
+**Add-on Repository Management** - Add community repositories to access popular add-ons!
+
+### New MCP Tools (2 repository tools)
+
+**Repository Management:**
+- `ha_list_repositories` - List all connected add-on repositories
+- `ha_add_repository` - Add custom add-on repository URL
+
+### Why This Matters
+
+**Problem:** Users see only 1-2 add-ons because community repositories aren't connected.
+
+**Solution:** AI can now:
+1. Check which repositories are connected
+2. Suggest adding popular repositories
+3. Add repositories programmatically
+4. Show available add-ons after adding repository
+
+**Popular repositories:**
+- Community: https://github.com/hassio-addons/repository
+- Zigbee2MQTT: https://github.com/zigbee2mqtt/hassio-zigbee2mqtt
+- ESPHome: https://github.com/esphome/hassio
+
+### Changes
+
+- Added `ha_list_repositories` tool
+- Added `ha_add_repository` tool
+- AI can now manage repository sources
+- Better explanation when minimal add-ons available
+
+### Requires
+
+- HA Cursor Agent v2.3.10+
+
 ## [2.3.0] - 2025-11-09
 
 ### 🚀 MAJOR: Complete Add-on Management

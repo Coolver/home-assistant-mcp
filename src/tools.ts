@@ -519,6 +519,28 @@ export const tools: Tool[] = [
       required: ['slug', 'options'],
     },
   },
+  {
+    name: 'ha_list_repositories',
+    description: '[READ-ONLY] List all add-on repositories connected to Home Assistant. Shows which sources provide available add-ons. Safe operation - only reads data.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'ha_add_repository',
+    description: '[WRITE] Add a custom add-on repository to Home Assistant. MODIFIES configuration - requires approval. Use to add community repositories with popular add-ons (Zigbee2MQTT, Node-RED, ESPHome, etc).',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        repository_url: {
+          type: 'string',
+          description: 'Repository URL to add (e.g., https://github.com/hassio-addons/repository)',
+        },
+      },
+      required: ['repository_url'],
+    },
+  },
 ];
 
 
