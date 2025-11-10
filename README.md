@@ -15,7 +15,7 @@ No more manual YAML editing or searching through documentation!
 
 Built on [Model Context Protocol](https://modelcontextprotocol.io/) and powered by [HA Cursor Agent](https://github.com/Coolver/home-assistant-cursor-agent).
 
-[![NPM Version](https://img.shields.io/npm/v/@coolver/mcp-home-assistant)](https://www.npmjs.com/package/@coolver/mcp-home-assistant)
+[![NPM Version](https://img.shields.io/npm/v/@coolver/home-assistant-mcp)](https://www.npmjs.com/package/@coolver/home-assistant-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### ✨ Key Features
@@ -147,7 +147,7 @@ Install the agent in your Home Assistant:
   "mcpServers": {
     "home-assistant": {
       "command": "npx",
-      "args": ["-y", "@coolver/mcp-home-assistant@latest"],
+      "args": ["-y", "@coolver/home-assistant-mcp@latest"],
       "env": {
         "HA_AGENT_URL": "http://homeassistant.local:8099",
         "HA_AGENT_KEY": "YOUR_API_KEY_HERE"
@@ -441,7 +441,7 @@ If your agent runs on a different URL:
   "mcpServers": {
     "home-assistant": {
       "command": "npx",
-      "args": ["-y", "@coolver/mcp-home-assistant@latest"],
+      "args": ["-y", "@coolver/home-assistant-mcp@latest"],
       "env": {
         "HA_AGENT_URL": "http://192.168.1.100:8099",
         "HA_AGENT_KEY": "your_api_key_here"

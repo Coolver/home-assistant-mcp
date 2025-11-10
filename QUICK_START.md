@@ -5,7 +5,7 @@
 Your MCP package is **ready to publish**! ✨
 
 ```
-✅ Package: @coolver/mcp-home-assistant
+✅ Package: @coolver/home-assistant-mcp
 ✅ Version: 1.0.0
 ✅ Size: 10.8 kB (unpacked: 46.5 kB)
 ✅ Files: 15 files (source, types, README, LICENSE)
@@ -79,10 +79,10 @@ After publishing, test that it works:
 
 ```bash
 # Install globally
-npm install -g @coolver/mcp-home-assistant
+npm install -g @coolver/home-assistant-mcp
 
 # Or use with npx (no installation needed)
-npx @coolver/mcp-home-assistant
+npx @coolver/home-assistant-mcp
 ```
 
 ---
@@ -100,7 +100,7 @@ Add to `~/.cursor/mcp.json`:
   "mcpServers": {
     "home-assistant": {
       "command": "npx",
-      "args": ["-y", "@coolver/mcp-home-assistant"],
+      "args": ["-y", "@coolver/home-assistant-mcp"],
       "env": {
         "HA_AGENT_URL": "http://homeassistant.local:8099",
         "HA_TOKEN": "their_token_here"
@@ -113,7 +113,7 @@ Add to `~/.cursor/mcp.json`:
 ### Option 2: Global Install
 
 ```bash
-npm install -g @coolver/mcp-home-assistant
+npm install -g @coolver/home-assistant-mcp
 ```
 
 Then in `~/.cursor/mcp.json`:
@@ -138,9 +138,9 @@ Then in `~/.cursor/mcp.json`:
 
 ### Check Your Package
 
-- **NPM page:** https://www.npmjs.com/package/@coolver/mcp-home-assistant
+- **NPM page:** https://www.npmjs.com/package/@coolver/home-assistant-mcp
 - **GitHub:** https://github.com/Coolver/home-assistant-mcp
-- **Downloads:** https://npm-stat.com/charts.html?package=@coolver/mcp-home-assistant
+- **Downloads:** https://npm-stat.com/charts.html?package=@coolver/home-assistant-mcp
 
 ### Create GitHub Release
 
