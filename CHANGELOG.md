@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.4] - 2025-11-10
+
+### 🏗️ REFACTOR: Modular Architecture
+
+**Internal refactor with 100% backward compatibility!**
+
+**Part 1: Modular Tool Definitions**
+- Created `src/tools/` directory structure
+- Split tools into domain modules:
+  * `files.ts` - File operations (4 tools)
+  * `system.ts` - System operations (4 tools)
+  * `dashboard.ts` - Dashboard operations (4 tools)
+  * `index.ts` - Central export
+- 12 tools migrated to modules
+- Remaining 35 tools in old file (can migrate later)
+
+**Part 2: Handler Registry Pattern**
+- Created `src/handlers.ts` with typed handlers
+- Replaced 428-line switch statement with registry lookup
+- Clean, maintainable handler functions
+
+**Benefits:**
+- ✅ 75% reduction in index.ts (428 → 108 lines)
+- ✅ Type-safe handler functions
+- ✅ Easier to add new tools
+- ✅ Better code organization
+- ✅ Improved maintainability
+
+**Backward Compatibility:**
+- ✅ All 47 tool names unchanged
+- ✅ All parameters unchanged
+- ✅ All behavior unchanged
+- ✅ No breaking changes
+- ✅ Users don't need to update configs
+
+**Git Stats:**
+- index.ts: 428 → 108 lines (-75%)
+- handlers.ts: +270 lines (new)
+- tools/: +3 modules (new)
+
+**Version:** 3.0.4 (PATCH - internal refactor, no API changes)
+
 ## [3.0.3] - 2025-11-10
 
 ### 🔧 Final Polish: Complete Rename
