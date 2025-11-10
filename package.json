@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/Coolver/home-assistant-mcp#readme",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.5.0",
+    "@modelcontextprotocol/sdk": "^1.21.1",
     "axios": "^1.6.0"
   },
   "devDependencies": {
