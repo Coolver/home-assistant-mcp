@@ -2,6 +2,143 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.3] - 2025-11-10
+
+### 🔧 Final Polish: Complete Rename
+
+**Updated all remaining references to new package name:**
+
+**Changes:**
+- src/index.ts: server name 'mcp-home-assistant' → 'home-assistant-mcp'
+- src/index.ts: version synced with package.json (3.0.3)
+- QUICK_START.md: all paths and commands updated
+- bin: simplified format to string path
+
+**Version:** 3.0.3
+
+## [3.0.2] - 2025-11-10
+
+### 🐛 Bug Fix: NPM Publish Warnings
+
+**Fixed NPM publish warnings:**
+- repository.url: added `git+` prefix
+- Added .npmrc with provenance=true
+
+## [3.0.1] - 2025-11-10
+
+### 🔧 Bug Fix: Bin Format
+
+**Restored bin to object format after NPM auto-correction.**
+
+## [3.0.0] - 2025-11-10
+
+### 🎯 BREAKING: Package Renamed + SDK Upgraded
+
+**MAJOR: Package renamed for consistency!**
+
+**Old name:** `@coolver/mcp-home-assistant`  
+**New name:** `@coolver/home-assistant-mcp`
+
+**Breaking Changes:**
+- Package name changed
+- Users MUST update mcp.json:
+  ```json
+  "args": ["-y", "@coolver/home-assistant-mcp@latest"]
+  ```
+- SDK: 0.5.0 → 1.21.1 (new API)
+- bin command: mcp-home-assistant → home-assistant-mcp
+
+**Why:**
+- Consistency with GitHub repo (home-assistant-mcp)
+- Development stage (no users affected)
+- Clearer naming (home-assistant first)
+
+**Changes:**
+- package.json: name, version (2.5.1 → 3.0.0), bin, SDK dependency
+- README.md: all package references updated
+- QUICK_START.md: all package references updated
+- Repository: github.com/Coolver/home-assistant-mcp
+
+**Requires:** HA Cursor Agent v2.6.0+
+
+## [2.5.0] - 2025-11-09
+
+### 🎯 MAJOR REFACTOR: AI-Driven Dashboard Generation
+
+**Removed server-side generation - AI generates in Cursor now!**
+
+**Changes:**
+- ❌ REMOVED: ha_generate_dashboard tool
+- ✅ UPDATED: ha_analyze_entities_for_dashboard (full entity data)
+- ✅ KEPT: ha_apply_dashboard, ha_delete_dashboard
+
+**New Workflow:**
+1. User asks for dashboard
+2. AI asks clarifying questions (conversational!)
+3. AI analyzes entities
+4. AI generates custom YAML in Cursor
+5. AI proposes to user
+6. AI applies via ha_apply_dashboard
+
+**Benefits:**
+- AI understands context
+- Flexible custom layouts
+- Conversational approach
+- No rigid templates
+
+**Requires:** HA Cursor Agent v2.5.0+
+
+## [2.4.3] - 2025-11-09
+
+### ✨ Feature: Full HA Restart Tool
+
+**Added ha_restart tool:**
+- Full Home Assistant restart (not just component reload)
+- Use when config changes require full restart
+- HA unavailable for ~60 seconds
+
+**Requires:** HA Cursor Agent v2.4.7+
+
+## [2.4.2] - 2025-11-09
+
+### 🗑️ Feature: Dashboard Deletion
+
+**Added ha_delete_dashboard tool:**
+- Delete dashboard file
+- Remove from configuration.yaml
+- Restart Home Assistant
+- Git backup
+
+**Complete dashboard lifecycle:**
+- ha_analyze_entities_for_dashboard → analyze
+- ha_apply_dashboard → create + register
+- ha_delete_dashboard → delete + unregister
+
+**Requires:** HA Cursor Agent v2.4.5+
+
+## [2.4.1] - 2025-11-09
+
+### 🎯 Feature: Dashboard Auto-Registration
+
+**Dashboard auto-registration parameters:**
+- filename: custom dashboard filename
+- register_dashboard: auto-register in configuration.yaml
+- No manual UI steps needed!
+
+**Requires:** HA Cursor Agent v2.4.2+
+
+## [2.4.0] - 2025-11-09
+
+### 🎨 MAJOR: Lovelace Dashboard Generator
+
+**Initial dashboard generation tools:**
+- ha_analyze_entities_for_dashboard
+- ha_generate_dashboard (later removed in v2.5.0)
+- ha_preview_dashboard
+- ha_apply_dashboard
+
+**Requires:** HA Cursor Agent v2.4.0+
+
 ## [2.3.4] - 2025-11-09
 
 ### 🔍 Feature: MCP Client Version Tracking
