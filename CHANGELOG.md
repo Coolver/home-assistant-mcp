@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.2] - 2025-11-18
+
+### 🔧 IMPROVED: Helper Deletion
+
+**Enhanced `ha_delete_helper` to support config entry helpers**
+
+**Changes:**
+- ✅ `ha_delete_helper` now attempts to delete helpers created via UI/API (config entries)
+- ✅ Works with both YAML-defined helpers and config entry helpers
+- ✅ Better error handling and reporting
+
+**Requires:** HA Cursor Agent v2.9.3+
+
 ## [3.2.1] - 2025-11-18
 
 ### ✨ NEW: Service Call Support
