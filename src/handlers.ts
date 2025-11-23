@@ -72,6 +72,11 @@ export const toolHandlers: Record<string, ToolHandler> = {
     return jsonResponse(result);
   },
 
+  'ha_rename_entity': async (client, args) => {
+    const result = await client.renameEntity(args.old_entity_id, args.new_entity_id);
+    return jsonResponse(result);
+  },
+
   // Helper Operations
   'ha_list_helpers': async (client, args) => {
     const result = await client.listHelpers();

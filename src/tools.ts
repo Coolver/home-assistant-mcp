@@ -90,6 +90,24 @@ export const tools: Tool[] = [
       required: ['entity_id'],
     },
   },
+  {
+    name: 'ha_rename_entity',
+    description: '[WRITE] Rename an entity_id in Home Assistant via Entity Registry. MODIFIES entity registry - requires approval. After renaming, you may need to reload automations/scripts that reference the entity.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        old_entity_id: {
+          type: 'string',
+          description: 'Current entity_id (e.g., "climate.sonoff_trvzb_thermostat")',
+        },
+        new_entity_id: {
+          type: 'string',
+          description: 'New entity_id (e.g., "climate.office_trv_thermostat")',
+        },
+      },
+      required: ['old_entity_id', 'new_entity_id'],
+    },
+  },
 
   // Helper Operations
   {

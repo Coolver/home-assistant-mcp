@@ -77,6 +77,14 @@ export class HAClient {
     return response.data;
   }
 
+  async renameEntity(oldEntityId: string, newEntityId: string): Promise<any> {
+    const response = await this.client.post(`/api/entities/rename`, {
+      old_entity_id: oldEntityId,
+      new_entity_id: newEntityId,
+    });
+    return response.data;
+  }
+
   // Helpers API
   async createHelper(type: string, config: any): Promise<any> {
     const response = await this.client.post(`/api/helpers/create`, {
