@@ -2,6 +2,8 @@
 
 **Build smart home automations with AI - just describe what you want in natural language** 🏠🤖
 
+**You should start by installing the Home Assistant Vibecode Agent:** https://github.com/Coolver/home-assistant-cursor-agent
+
 Transform your smart home management! This MCP server enables Cursor AI, Visual Studio Code or your favourite IDE with MCP support to:
 - 📝 Analyze your Home Assistant configuration and devices
 - 🏗️ Create intelligent automations, scripts, and complete systems
