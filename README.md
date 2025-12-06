@@ -140,12 +140,10 @@ Install the agent in your Home Assistant:
 1. Open your **Home Assistant** (usually http://homeassistant.local:8123)
 2. Go to **Settings** → **Add-ons** → **HA Vibecode Agent**
 3. Click **"Open Web UI"** button
+4. Click the **Cursor** or **VS Code** tab (depending on which IDE you want to use with Home Assistant) and **follow the setup instructions**. You’ll need to install and configure Cursor or VS Code so they can connect to the HA Agent via the MCP protocol.
+5. That’s it — **you’re ready to start** working with your Home Assistant scripts, automations and dashboards using AI.
+If you find this project useful and want to support its development, **please consider giving it a [GitHub Star](https://github.com/Coolver/home-assistant-mcp) ⭐**
 
-You'll see this interface with tabs for Cursor and VS Code + Copilot. Нажми на вкладку для Cursor или VS Code в зависимости от IDE в котором вы хотите работать с вашим Home Assistant и следуйте инструкциям, вам понадобится установить и настроить Cursor или VS Code чтобы они через MCP протокол могли взаимодействовать с агентом, который вы установили на борте Home Assistant.
-
-Все готово, чтобы начать работать с вашими скриптами, автоматизациями и дашбордами Home Assistant с помощью AI.
-
-Если вам нравится проект и вы хотите его развития, поставьте, пожалуйста, [GitHub Star](https://github.com/Coolver/home-assistant-cursor-agent) ⭐
 
 ### Step 3: Test Connection
 
