@@ -3,6 +3,11 @@
 [![NPM Version](https://img.shields.io/npm/v/@coolver/home-assistant-mcp)](https://www.npmjs.com/package/@coolver/home-assistant-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> ⚙️ This MCP server works together with the  
+> [Home Assistant Vibecode Agent](https://github.com/Coolver/home-assistant-vibecode-agent),  
+> installed as a Home Assistant add-on.  
+> The agent runs on your Home Assistant instance and provides “eyes and hands” for AI IDEs like Cursor, VS Code, Claude Code, or any other MCP-enabled IDE.
+
 **Let AI build your Home Assistant automations – just describe what you want in natural language** 🏠🤖
 
 You describe your goal → AI inspects your Home Assistant → designs a custom solution → and deploys it on-board automatically. 🚀
