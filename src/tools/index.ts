@@ -25,6 +25,8 @@ const migratedToolNames = [
   'ha_read_file', 'ha_write_file', 'ha_list_files', 'ha_delete_file',  // files
   'ha_check_config', 'ha_reload_config', 'ha_restart', 'ha_get_logs',  // system
   'ha_analyze_entities_for_dashboard', 'ha_preview_dashboard', 'ha_apply_dashboard', 'ha_delete_dashboard',  // dashboard
+  // Note: Git tools (ha_git_history, ha_git_pending, ha_git_commit, etc.) are in tools.ts
+  // and will be included in remainingTools (not in this list)
 ];
 
 // Filter out migrated tools (avoid duplicates)
