@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.17] - 2025-12-22
+
+### ✨ Git Versioning: Manual Commit Mode Support
+
+**New Features:**
+- ✅ **Manual commit mode support**: `ha_git_commit` now supports optional `message` parameter
+  - When `message` is omitted and `git_versioning_auto=false`, returns suggested commit message
+  - AI can show suggestion to user for confirmation/editing before committing
+- ✅ **New `ha_git_pending` tool**: View uncommitted changes in shadow repository
+  - Useful when `git_versioning_auto=false` to see what changes are pending commit
+  - Returns files modified/added/deleted, summary, and diff
+
+**Improvements:**
+- ✅ **Enhanced `ha_git_commit` handler**: Properly handles `needs_confirmation` response from API
+- ✅ **Better documentation**: Updated tool descriptions to explain manual mode behavior
+
+**Maintenance:**
+- ✅ **Git ignore updates**: Added `COMMIT_MESSAGES.md` and registry tokens to `.gitignore`
+
 ## [3.2.16] - 2025-12-09
 
 ### ✨ New Feature
