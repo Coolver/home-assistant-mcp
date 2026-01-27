@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.24] - 2026-01-27
+
+### ✨ Update endpoints for automations and scripts
+
+**Complete CRUD operations for automations and scripts**
+
+- ✅ **Update automations**: Added `ha_update_automation` tool to update existing automations via REST API
+- ✅ **Update scripts**: Added `ha_update_script` tool to update existing scripts via REST API
+- ✅ **Full CRUD support**: Now supports Create, Read, Update, Delete for both automations and scripts
+
 ## [3.2.23] - 2026-01-20
 
 ### ✨ Device entity discovery support
