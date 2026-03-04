@@ -96,6 +96,21 @@ export class HAClient {
     return response.data;
   }
 
+  async listExposedEntities(assistant?: string): Promise<any> {
+    const params = assistant ? { assistant } : {};
+    const response = await this.client.get(`/api/entities/exposed`, { params });
+    return response.data;
+  }
+
+  async exposeEntities(entityIds: string[], shouldExpose?: boolean, assistant?: string): Promise<any> {
+    const response = await this.client.post(`/api/entities/expose`, {
+      entity_ids: entityIds,
+      should_expose: shouldExpose ?? true,
+      assistant: assistant ?? 'conversation',
+    });
+    return response.data;
+  }
+
   // Entity Registry API
   async getEntityRegistryList(): Promise<any[]> {
     const response = await this.client.get(`/api/registries/entities/list`);
