@@ -54,11 +54,17 @@ export class HAClient {
     });
   }
 
-  async listFiles(directory: string = '/'): Promise<any[]> {
+  async listFiles(options?: {
+    directory?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
     const response = await this.client.get(`/api/files/list`, {
-      params: { directory },
+      params,
     });
-    return response.data.files;
+    return response.data;
   }
 
   async deleteFile(path: string): Promise<void> {
@@ -112,9 +118,17 @@ export class HAClient {
   }
 
   // Entity Registry API
-  async getEntityRegistryList(): Promise<any[]> {
-    const response = await this.client.get(`/api/registries/entities/list`);
-    return response.data.entities;
+  async getEntityRegistryList(options?: {
+    search?: string;
+    domain?: string;
+    area_id?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
+    const response = await this.client.get(`/api/registries/entities/list`, { params });
+    return response.data;
   }
 
   async getEntityRegistryEntry(entityId: string): Promise<any> {
@@ -143,9 +157,15 @@ export class HAClient {
   }
 
   // Area Registry API
-  async getAreaRegistryList(): Promise<any[]> {
-    const response = await this.client.get(`/api/registries/areas/list`);
-    return response.data.areas;
+  async getAreaRegistryList(options?: {
+    search?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
+    const response = await this.client.get(`/api/registries/areas/list`, { params });
+    return response.data;
   }
 
   async getAreaRegistryEntry(areaId: string): Promise<any> {
@@ -178,9 +198,16 @@ export class HAClient {
   }
 
   // Device Registry API
-  async getDeviceRegistryList(): Promise<any[]> {
-    const response = await this.client.get(`/api/registries/devices/list`);
-    return response.data.devices;
+  async getDeviceRegistryList(options?: {
+    search?: string;
+    area_id?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
+    const response = await this.client.get(`/api/registries/devices/list`, { params });
+    return response.data;
   }
 
   async getDeviceRegistryEntry(deviceId: string, includeEntities?: boolean): Promise<any> {
@@ -216,8 +243,15 @@ export class HAClient {
     return response.data;
   }
 
-  async listHelpers(): Promise<any> {
-    const response = await this.client.get(`/api/helpers/list`);
+  async listHelpers(options?: {
+    domain?: string;
+    search?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
+    const response = await this.client.get(`/api/helpers/list`, { params });
     return response.data;
   }
 
@@ -237,14 +271,18 @@ export class HAClient {
     return response.data;
   }
 
-  async listAutomations(idsOnly: boolean = false): Promise<any> {
+  async listAutomations(options?: {
+    ids_only?: boolean;
+    search?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
     const response = await this.client.get(`/api/automations/list`, {
-      params: { ids_only: idsOnly },
+      params,
     });
-    if (idsOnly) {
-      return response.data.automation_ids || [];
-    }
-    return response.data.automations;
+    return response.data;
   }
 
   async getAutomation(automationId: string): Promise<any> {
@@ -276,14 +314,18 @@ export class HAClient {
     return response.data;
   }
 
-  async listScripts(idsOnly: boolean = false): Promise<any> {
+  async listScripts(options?: {
+    ids_only?: boolean;
+    search?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
     const response = await this.client.get(`/api/scripts/list`, {
-      params: { ids_only: idsOnly },
+      params,
     });
-    if (idsOnly) {
-      return response.data.script_ids || [];
-    }
-    return response.data.scripts;
+    return response.data;
   }
 
   async getScript(scriptId: string): Promise<any> {
@@ -384,8 +426,15 @@ export class HAClient {
     return response.data;
   }
 
-  async hacsListRepositories(): Promise<any> {
-    const response = await this.client.get(`/api/hacs/repositories`);
+  async hacsListRepositories(options?: {
+    category?: string;
+    search?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
+    const response = await this.client.get(`/api/hacs/repositories`, { params });
     return response.data;
   }
 
@@ -412,13 +461,25 @@ export class HAClient {
   }
 
   // Add-ons API
-  async listStoreAddons(): Promise<any> {
-    const response = await this.client.get(`/api/addons/store`);
+  async listStoreAddons(options?: {
+    search?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
+    const response = await this.client.get(`/api/addons/store`, { params });
     return response.data;
   }
 
-  async listAvailableAddons(): Promise<any> {
-    const response = await this.client.get(`/api/addons/available`);
+  async listAvailableAddons(options?: {
+    search?: string;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
+    const response = await this.client.get(`/api/addons/available`, { params });
     return response.data;
   }
 
@@ -494,8 +555,15 @@ export class HAClient {
   }
 
   // Lovelace Dashboard API
-  async analyzeEntitiesForDashboard(): Promise<any> {
-    const response = await this.client.get(`/api/lovelace/analyze`);
+  async analyzeEntitiesForDashboard(options?: {
+    domains?: string[];
+    summary_only?: boolean;
+    page?: number;
+    page_size?: number;
+    full_list?: boolean;
+  }): Promise<any> {
+    const params = options || {};
+    const response = await this.client.get(`/api/lovelace/analyze`, { params });
     return response.data;
   }
 

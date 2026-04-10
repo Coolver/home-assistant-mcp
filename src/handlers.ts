@@ -171,7 +171,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
   },
 
   'ha_list_files': async (client, args) => {
-    const result = await client.listFiles(args.directory);
+    const result = await client.listFiles(args);
     return jsonResponse(result);
   },
 
@@ -208,7 +208,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
 
   // Entity Registry Operations
   'ha_get_entity_registry': async (client, args) => {
-    const result = await client.getEntityRegistryList();
+    const result = await client.getEntityRegistryList(args);
     return jsonResponse(result);
   },
 
@@ -235,7 +235,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
 
   // Area Registry Operations
   'ha_get_area_registry': async (client, args) => {
-    const result = await client.getAreaRegistryList();
+    const result = await client.getAreaRegistryList(args);
     return jsonResponse(result);
   },
 
@@ -261,7 +261,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
 
   // Device Registry Operations
   'ha_get_device_registry': async (client, args) => {
-    const result = await client.getDeviceRegistryList();
+    const result = await client.getDeviceRegistryList(args);
     return jsonResponse(result);
   },
 
@@ -283,7 +283,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
 
   // Helper Operations
   'ha_list_helpers': async (client, args) => {
-    const result = await client.listHelpers();
+    const result = await client.listHelpers(args);
     return jsonResponse(result);
   },
   'ha_create_helper': async (client, args) => {
@@ -305,7 +305,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
   },
 
   'ha_list_automations': async (client, args) => {
-    const result = await client.listAutomations(args.ids_only || false);
+    const result = await client.listAutomations(args);
     return jsonResponse(result);
   },
 
@@ -334,7 +334,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
   },
 
   'ha_list_scripts': async (client, args) => {
-    const result = await client.listScripts(args.ids_only || false);
+    const result = await client.listScripts(args);
     return jsonResponse(result);
   },
 
@@ -451,7 +451,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
   },
 
   'ha_hacs_list_repositories': async (client, args) => {
-    const result = await client.hacsListRepositories();
+    const result = await client.hacsListRepositories(args);
     return jsonResponse(result);
   },
 
@@ -477,12 +477,12 @@ export const toolHandlers: Record<string, ToolHandler> = {
 
   // Add-on Operations
   'ha_list_store_addons': async (client, args) => {
-    const result = await client.listStoreAddons();
+    const result = await client.listStoreAddons(args);
     return jsonResponse(result);
   },
 
   'ha_list_addons': async (client, args) => {
-    const result = await client.listAvailableAddons();
+    const result = await client.listAvailableAddons(args);
     return jsonResponse(result);
   },
 
@@ -553,7 +553,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
 
   // Dashboard Operations
   'ha_analyze_entities_for_dashboard': async (client, args) => {
-    const result = await client.analyzeEntitiesForDashboard();
+    const result = await client.analyzeEntitiesForDashboard(args);
     return jsonResponse(result);
   },
 
@@ -587,10 +587,11 @@ export const toolHandlers: Record<string, ToolHandler> = {
 
   // Service Calls
   'ha_call_service': async (client, args) => {
+    const serviceData = args.service_data ?? args.data;
     const result = await client.callService(
       args.domain,
       args.service,
-      args.service_data,
+      serviceData,
       args.target
     );
     return jsonResponse(result);

@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.27] - 2026-04-10
+
+**Release prepared with thanks to:** [@ctaylor86](https://github.com/ctaylor86), [@johny-mnemonic](https://github.com/johny-mnemonic), and [@wilsto](https://github.com/wilsto).
+
+### Your IDE assistant can finally “turn the page” on big lists
+
+**Pair this MCP release with Vibecode Agent 2.10.42 or newer** so list actions in Cursor and other MCP clients match the behaviour below.
+
+**Before:** Entity listing was already built for large homes. For **many other** actions—automations, scripts, registries, helpers, add-ons, HACS, files, dashboard prep—the assistant often saw **only the bare list** and missed the surrounding context (how many items in total, whether another page exists). It could not reliably move to “the next chunk” or pass your search and page preferences through to Home Assistant.
+
+**After:** Those same flows now pass your choices through end-to-end and return **complete answers** from the agent, including whether another page is available. The assistant can work through long lists in steps, use search and filters when you ask, and stay within reasonable context—similar to how entity browsing already worked, but extended to automations, scripts, registries, helpers, add-on browsing, HACS, file listings, and dashboard-oriented entity summaries.
+
+### Tools that pass “settings blocks” are reliable again
+
+Some actions—calling a service with extra details, creating helpers or automations, updating entity labels—stopped working for people when their editor or Home Assistant stack updated: the assistant sometimes received settings as plain text instead of a proper structured block, or the usual name for “service details” didn’t match what our tools expected, so nothing useful reached Home Assistant. This release tightens that path: we accept the familiar naming people use from Home Assistant itself, and we interpret serialized settings when the client sends them that way—so those flows should behave like they did before, without extra guesswork on your side.
+
 ## [3.2.25] - 2026-01-28
 
 ### 🔧 Timeout tuning for heavy operations

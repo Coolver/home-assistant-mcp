@@ -9,6 +9,7 @@ import {
 import { HAClient } from './ha-client.js';
 import { tools } from './tools/index.js';
 import { toolHandlers } from './handlers.js';
+import { normalizeToolArgs } from './arg-normalizer.js';
 
 // Get configuration from environment
 const HA_AGENT_URL = process.env.HA_AGENT_URL || 'http://homeassistant.local:8099';
@@ -32,7 +33,7 @@ const haClient = new HAClient({
 const server = new Server(
   {
     name: 'home-assistant-mcp',
-    version: '3.2.24',
+    version: '3.2.27',
   },
   {
     capabilities: {
@@ -66,7 +67,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
     
     // Execute handler
-    return await handler(haClient, args);
+    const normalizedArgs = normalizeToolArgs(name, args as Record<string, unknown>);
+    return await handler(haClient, normalizedArgs);
   } catch (error: any) {
     let errorMessage: string;
     

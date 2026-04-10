@@ -40,13 +40,25 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_list_files',
-    description: '[READ-ONLY] List files and directories in Home Assistant. Safe operation - only reads data.',
+    description: '[READ-ONLY] List files and directories in Home Assistant with pagination support. Safe operation - only reads data. Default page_size is 250; if response has has_next=true, request next page.',
     inputSchema: {
       type: 'object',
       properties: {
         directory: {
           type: 'string',
           description: 'Directory path relative to /config (default: "/")',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Files per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
         },
       },
     },
@@ -175,10 +187,35 @@ export const tools: Tool[] = [
   // Entity Registry Operations
   {
     name: 'ha_get_entity_registry',
-    description: '[READ-ONLY] Get all entities from Entity Registry with metadata (area_id, device_id, name, disabled status, etc.). Safe operation - only reads data. Use this to get area assignments and other metadata not available in ha_list_entities.',
+    description: '[READ-ONLY] Get entities from Entity Registry with metadata (area_id, device_id, name, disabled status, etc.) and pagination/filtering. Safe operation - only reads data. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        search: {
+          type: 'string',
+          description: 'Optional substring to search in entity_id, name, original_name',
+        },
+        domain: {
+          type: 'string',
+          description: 'Optional domain filter (e.g., "climate", "light")',
+        },
+        area_id: {
+          type: 'string',
+          description: 'Optional area_id filter',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Entities per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {
@@ -260,10 +297,27 @@ export const tools: Tool[] = [
   // Area Registry Operations
   {
     name: 'ha_get_area_registry',
-    description: '[READ-ONLY] Get all areas from Area Registry. Safe operation - only reads data.',
+    description: '[READ-ONLY] Get areas from Area Registry with pagination/filtering. Safe operation - only reads data. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        search: {
+          type: 'string',
+          description: 'Optional substring to search in area_id or area name',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Areas per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {
@@ -340,10 +394,31 @@ export const tools: Tool[] = [
   // Device Registry Operations
   {
     name: 'ha_get_device_registry',
-    description: '[READ-ONLY] Get all devices from Device Registry with metadata (area_id, name, manufacturer, model, etc.). Safe operation - only reads data.',
+    description: '[READ-ONLY] Get devices from Device Registry with metadata and pagination/filtering. Safe operation - only reads data. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        search: {
+          type: 'string',
+          description: 'Optional substring to search in device id/name/model/manufacturer',
+        },
+        area_id: {
+          type: 'string',
+          description: 'Optional area_id filter',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Devices per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {
@@ -410,10 +485,31 @@ export const tools: Tool[] = [
   // Helper Operations
   {
     name: 'ha_list_helpers',
-    description: '[READ-ONLY] List all helpers in Home Assistant. Safe operation - only reads data.',
+    description: '[READ-ONLY] List helpers in Home Assistant with pagination/filtering. Safe operation - only reads data. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        domain: {
+          type: 'string',
+          description: 'Optional helper domain filter (e.g., input_boolean, input_number, group)',
+        },
+        search: {
+          type: 'string',
+          description: 'Optional substring to search in entity_id or friendly_name',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Helpers per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {
@@ -498,13 +594,29 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_list_automations',
-    description: '[READ-ONLY] List all automations in Home Assistant. Safe operation - only reads data. Use ids_only=true to get only automation IDs without full configurations (useful when you need to check if automation exists or get list of IDs before fetching specific automation).',
+    description: '[READ-ONLY] List automations in Home Assistant with pagination/filtering. Safe operation - only reads data. Default page_size is 250. Use ids_only=true for token-efficient listing. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
       properties: {
         ids_only: {
           type: 'boolean',
           description: 'If true, return only list of automation IDs. If false (default), return full automation configurations.',
+        },
+        search: {
+          type: 'string',
+          description: 'Optional substring search in automation id or alias',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Automations per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
         },
       },
     },
@@ -581,13 +693,29 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_list_scripts',
-    description: '[READ-ONLY] List all scripts in Home Assistant. Safe operation - only reads data. Use ids_only=true to get only script IDs without full configurations (useful when you need to check if script exists or get list of IDs before fetching specific script).',
+    description: '[READ-ONLY] List scripts in Home Assistant with pagination/filtering. Safe operation - only reads data. Default page_size is 250. Use ids_only=true for token-efficient listing. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
       properties: {
         ids_only: {
           type: 'boolean',
           description: 'If true, return only list of script IDs. If false (default), return full script configurations.',
+        },
+        search: {
+          type: 'string',
+          description: 'Optional substring search in script id or alias',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Scripts per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
         },
       },
     },
@@ -841,10 +969,32 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_hacs_list_repositories',
-    description: '[READ-ONLY] List available HACS repositories (integrations, themes, plugins). Requires HACS to be installed and configured. If HACS not installed, use ha_hacs_status first and offer installation. Safe operation - only reads data.',
+    description: '[READ-ONLY] List available HACS repositories (integrations, themes, plugins) with pagination/filtering. Requires HACS. Safe operation - only reads data. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        category: {
+          type: 'string',
+          description: 'Optional category filter',
+          enum: ['integration', 'theme', 'plugin', 'appdaemon', 'netdaemon', 'python_script'],
+        },
+        search: {
+          type: 'string',
+          description: 'Optional substring search in repository full name/name/description',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Repositories per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {
@@ -912,18 +1062,52 @@ export const tools: Tool[] = [
 
   {
     name: 'ha_list_store_addons',
-    description: '[READ-ONLY] List ALL add-ons from add-on store catalog (complete list from all repositories). Use this to browse available add-ons and make recommendations. Safe operation - only reads data.',
+    description: '[READ-ONLY] List add-ons from add-on store catalog with pagination/filtering. Safe operation - only reads data. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        search: {
+          type: 'string',
+          description: 'Optional substring search in add-on name, slug, description',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Add-ons per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {
     name: 'ha_list_addons',
-    description: '[READ-ONLY] List available Home Assistant add-ons (limited list). For complete catalog, use ha_list_store_addons. Safe operation - only reads data.',
+    description: '[READ-ONLY] List available Home Assistant add-ons with pagination/filtering. Safe operation - only reads data. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        search: {
+          type: 'string',
+          description: 'Optional substring search in add-on name, slug, description',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Add-ons per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {
@@ -1109,10 +1293,32 @@ export const tools: Tool[] = [
 
   {
     name: 'ha_analyze_entities_for_dashboard',
-    description: '[READ-ONLY] Get complete entity list for AI-driven dashboard generation. Returns entities grouped by domain with attributes. AI will use this data to generate custom dashboard based on user requirements. Safe operation - only reads data.',
+    description: '[READ-ONLY] Get entities for AI-driven dashboard generation with pagination/filtering. Safe operation - only reads data. Use summary_only=true to reduce payload; if has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        domains: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Optional domain filters (e.g., ["climate", "light"])',
+        },
+        summary_only: {
+          type: 'boolean',
+          description: 'If true, return lightweight entity summary instead of full state objects',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Entities per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {
