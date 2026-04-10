@@ -196,6 +196,16 @@ export const toolHandlers: Record<string, ToolHandler> = {
     return jsonResponse(result);
   },
 
+  'ha_list_exposed_entities': async (client, args) => {
+    const result = await client.listExposedEntities(args.assistant);
+    return jsonResponse(result);
+  },
+
+  'ha_expose_entities': async (client, args) => {
+    const result = await client.exposeEntities(args.entity_ids, args.should_expose, args.assistant);
+    return jsonResponse(result);
+  },
+
   // Entity Registry Operations
   'ha_get_entity_registry': async (client, args) => {
     const result = await client.getEntityRegistryList();

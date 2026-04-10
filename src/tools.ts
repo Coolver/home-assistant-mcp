@@ -135,6 +135,42 @@ export const tools: Tool[] = [
       required: ['old_entity_id', 'new_entity_id'],
     },
   },
+  {
+    name: 'ha_list_exposed_entities',
+    description: '[READ-ONLY] List entities exposed to a voice assistant (Assist/Ollama, Alexa, Google Assistant). Safe operation - only reads data. Use to check which entities are available for voice control.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        assistant: {
+          type: 'string',
+          description: 'Assistant name: "conversation" (Assist/Ollama, default), "cloud.alexa", or "cloud.google_assistant"',
+        },
+      },
+    },
+  },
+  {
+    name: 'ha_expose_entities',
+    description: '[WRITE] Expose or unexpose entities to a voice assistant. MODIFIES voice assistant configuration - requires approval. Changes take effect immediately (no HA restart needed).',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        entity_ids: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'List of entity IDs to expose or unexpose (e.g., ["light.kitchen", "sensor.temperature"])',
+        },
+        should_expose: {
+          type: 'boolean',
+          description: 'True to expose, False to unexpose (default: true)',
+        },
+        assistant: {
+          type: 'string',
+          description: 'Assistant name: "conversation" (default), "cloud.alexa", or "cloud.google_assistant"',
+        },
+      },
+      required: ['entity_ids'],
+    },
+  },
 
   // Entity Registry Operations
   {
