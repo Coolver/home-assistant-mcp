@@ -14,7 +14,9 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,12 +24,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          # Node 24 ships with npm 11.x — required for OIDC trusted publishing + provenance
+          # (npm 10 from older Node lines can yield misleading E404 on publish; see npm/cli#9088).
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-      
-      # Do not run `npm install -g npm@latest` here: it can leave npm in a broken
-      # state on ubuntu-latest (e.g. MODULE_NOT_FOUND: promise-retry). The npm
-      # bundled with Node 22 is sufficient for `npm publish` with provenance/OIDC.
       
       - name: Install dependencies
         run: npm ci

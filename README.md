@@ -129,8 +129,8 @@ Before installing, you need:
 The MCP server requires Node.js to run on your computer (where your AI editor is installed):
 
 1. Check if Node.js is already installed: open terminal and run `node --version`
-2. If not installed or version is below v18.0.0, download and install from **[nodejs.org](https://nodejs.org)**
-3. After installation, verify: `node --version` should show v18.0.0 or higher
+2. If not installed or version is below v20.0.0, download and install from **[nodejs.org](https://nodejs.org)** (use the **24.x LTS** build when possible)
+3. After installation, verify: `node --version` should show v20.0.0 or higher (v24 LTS recommended)
 4. **Important:** Install Node.js on the computer where your AI editor runs, not on the Home Assistant server
 
 ### Step 1: Install HA Vibecode Agent
@@ -229,7 +229,7 @@ If your agent runs on a different URL:
 
 This error means Node.js is not installed or not found in your system PATH.
 
-**Solution:** Install Node.js (v18.0.0 or higher) on the computer where Cursor is running:
+**Solution:** Install Node.js (v20.0.0 or higher; **v24 LTS** recommended) on the computer where Cursor is running:
 
 1. Download and install Node.js from [https://nodejs.org](https://nodejs.org)
 2. Restart Cursor completely after installation
