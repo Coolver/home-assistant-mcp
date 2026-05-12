@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.28] - 2026-05-12
+
+**Pair with Vibecode Agent 2.10.45+.**
+
+### 13 new tools
+
+History and statistics, blueprints (browse and import community templates), calendars and todo lists, zone management, repair issue detection, and a snapshot tool that gives the AI a full picture of your smart home in one call — with filters for domains, areas, and a compact mode for large setups.
+
+### Smarter existing tools
+
+Entity search now tolerates typos. Service calls can wait until the device reaches the expected state. Automation listing has a lightweight summary mode.
+
+### Fixes
+
+Fixed tool schema regressions from incomplete migration (lost parameters, wrong descriptions). Added graceful shutdown. Version is now read dynamically instead of being hardcoded.
+
 ## [3.2.27] - 2026-04-10
 
 **Release prepared with thanks to:** [@ctaylor86](https://github.com/ctaylor86), [@johny-mnemonic](https://github.com/johny-mnemonic), and [@wilsto](https://github.com/wilsto).

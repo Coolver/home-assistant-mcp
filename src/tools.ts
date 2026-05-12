@@ -48,6 +48,10 @@ export const tools: Tool[] = [
           type: 'string',
           description: 'Directory path relative to /config (default: "/")',
         },
+        pattern: {
+          type: 'string',
+          description: 'File glob pattern to filter results (default: "*.yaml"). Use "*" to list all files, "*.mdc" for Cursor rules, etc.',
+        },
         page: {
           type: 'number',
           description: 'Page number (1-based, default 1)',
@@ -93,6 +97,14 @@ export const tools: Tool[] = [
         search: {
           type: 'string',
           description: 'Optional substring to search in entity_id or friendly_name (e.g., "kitchen")',
+        },
+        fuzzy: {
+          type: 'boolean',
+          description: 'If true, use fuzzy matching for search (tolerates typos like "bedrrom" -> "bedroom"). Results sorted by relevance.',
+        },
+        fuzzy_threshold: {
+          type: 'number',
+          description: 'Minimum fuzzy match score 0-100 (default 60). Only used when fuzzy=true.',
         },
         page: {
           type: 'number',
@@ -594,13 +606,17 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_list_automations',
-    description: '[READ-ONLY] List automations in Home Assistant with pagination/filtering. Safe operation - only reads data. Default page_size is 250. Use ids_only=true for token-efficient listing. If has_next=true, request next page.',
+    description: '[READ-ONLY] List automations in Home Assistant with pagination/filtering. Safe operation - only reads data. Default page_size is 250. Use ids_only=true for most token-efficient listing, summary_only=true for lightweight listing without triggers/conditions/actions. If has_next=true, request next page.',
     inputSchema: {
       type: 'object',
       properties: {
         ids_only: {
           type: 'boolean',
-          description: 'If true, return only list of automation IDs. If false (default), return full automation configurations.',
+          description: 'If true, return only list of automation IDs. Most token-efficient option.',
+        },
+        summary_only: {
+          type: 'boolean',
+          description: 'If true, return lightweight summary (id, alias, enabled, description) without triggers/conditions/actions. Saves tokens while still showing what each automation does.',
         },
         search: {
           type: 'string',
@@ -891,6 +907,39 @@ export const tools: Tool[] = [
           type: 'string',
           description: 'Filter by log level: DEBUG, INFO, WARNING, ERROR (optional)',
           enum: ['DEBUG', 'INFO', 'WARNING', 'ERROR'],
+        },
+      },
+    },
+  },
+  {
+    name: 'ha_get_repairs',
+    description: '[READ-ONLY] Get Home Assistant repair issues (configuration problems, deprecations, broken integrations). Similar to Settings -> System -> Repairs in the HA UI. Use to diagnose configuration issues.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'ha_get_snapshot',
+    description: '[READ-ONLY] Get an aggregated snapshot of the Home Assistant instance: entity states, areas, devices, integrations, and automations in a single call. Use this to get full context about the user\'s smart home setup. Each section is optional via the include parameter to avoid overloading the context window.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        include: {
+          type: 'string',
+          description: 'Comma-separated sections to include: states, areas, devices, config_entries, automations. Default: "states,areas"',
+        },
+        domains: {
+          type: 'string',
+          description: 'Comma-separated domain filter for states (e.g. "light,switch,sensor"). Only applies to the states section.',
+        },
+        area_id: {
+          type: 'string',
+          description: 'Filter states and devices by area_id',
+        },
+        summary_only: {
+          type: 'boolean',
+          description: 'If true, states return only entity_id + state without full attributes (saves tokens). Default: false',
         },
       },
     },
@@ -1406,8 +1455,223 @@ export const tools: Tool[] = [
           type: 'object',
           description: 'Target entity/entities (e.g., {"entity_id": "light.living_room"} or {"entity_id": ["light.room1", "light.room2"]})',
         },
+        wait_for_state: {
+          type: 'string',
+          description: 'If set, poll target entity until it reaches this state (e.g., "on", "off", "21.0"). Eliminates race conditions.',
+        },
+        wait_timeout: {
+          type: 'number',
+          description: 'Max seconds to wait for state change (default 10). Only used with wait_for_state.',
+        },
       },
       required: ['domain', 'service'],
+    },
+  },
+
+  // ==================== History & Statistics ====================
+
+  {
+    name: 'ha_get_history',
+    description: '[READ-ONLY] Get state history for an entity over a time period. Safe operation. Use to analyze trends, check when something changed, or debug automation timing.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        entity_id: {
+          type: 'string',
+          description: 'Entity ID to get history for (e.g., "sensor.bedroom_temperature")',
+        },
+        start: {
+          type: 'string',
+          description: 'Start time in ISO format (default: 24h ago). Example: "2026-05-01T00:00:00"',
+        },
+        end: {
+          type: 'string',
+          description: 'End time in ISO format (default: now)',
+        },
+        minimal_response: {
+          type: 'boolean',
+          description: 'If true (default), return minimal state data to save tokens',
+        },
+      },
+      required: ['entity_id'],
+    },
+  },
+  {
+    name: 'ha_get_statistics',
+    description: '[READ-ONLY] Get long-term statistics for an entity (energy consumption, temperature trends, etc.). Safe operation.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        entity_id: {
+          type: 'string',
+          description: 'Entity ID to get statistics for (e.g., "sensor.energy_consumption")',
+        },
+        period: {
+          type: 'string',
+          description: 'Statistics period: "5minute", "hour", "day", "week", "month" (default: "hour")',
+          enum: ['5minute', 'hour', 'day', 'week', 'month'],
+        },
+        start: {
+          type: 'string',
+          description: 'Start time in ISO format (default: 7 days ago)',
+        },
+        end: {
+          type: 'string',
+          description: 'End time in ISO format (default: now)',
+        },
+      },
+      required: ['entity_id'],
+    },
+  },
+
+  // ==================== Blueprints ====================
+
+  {
+    name: 'ha_list_blueprints',
+    description: '[READ-ONLY] List available automation or script blueprints. Safe operation. Use to find community-shared templates.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        domain: {
+          type: 'string',
+          description: 'Blueprint domain: "automation" (default) or "script"',
+          enum: ['automation', 'script'],
+        },
+      },
+    },
+  },
+  {
+    name: 'ha_import_blueprint',
+    description: '[WRITE] Import a blueprint from a URL (community forum, GitHub). MODIFIES configuration.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        url: {
+          type: 'string',
+          description: 'URL to import blueprint from (e.g., Home Assistant community forum URL or GitHub raw URL)',
+        },
+      },
+      required: ['url'],
+    },
+  },
+
+  // ==================== Calendar & Todo ====================
+
+  {
+    name: 'ha_list_calendars',
+    description: '[READ-ONLY] List all calendar entities. Safe operation.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'ha_get_calendar_events',
+    description: '[READ-ONLY] Get events from a calendar entity for a date range. Safe operation.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        entity_id: {
+          type: 'string',
+          description: 'Calendar entity ID (e.g., "calendar.personal")',
+        },
+        start: {
+          type: 'string',
+          description: 'Start time in ISO format (default: now)',
+        },
+        end: {
+          type: 'string',
+          description: 'End time in ISO format (default: 7 days from now)',
+        },
+      },
+      required: ['entity_id'],
+    },
+  },
+  {
+    name: 'ha_list_todos',
+    description: '[READ-ONLY] Get items from a todo list entity. Safe operation.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        entity_id: {
+          type: 'string',
+          description: 'Todo list entity ID (e.g., "todo.shopping_list")',
+        },
+      },
+      required: ['entity_id'],
+    },
+  },
+  {
+    name: 'ha_create_todo',
+    description: '[WRITE] Add an item to a todo list. MODIFIES data.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        entity_id: {
+          type: 'string',
+          description: 'Todo list entity ID (e.g., "todo.shopping_list")',
+        },
+        item: {
+          type: 'string',
+          description: 'Todo item text to add',
+        },
+      },
+      required: ['entity_id', 'item'],
+    },
+  },
+
+  // ==================== Zones ====================
+
+  {
+    name: 'ha_list_zones',
+    description: '[READ-ONLY] List all zones configured in Home Assistant (used for presence detection). Safe operation.',
+    inputSchema: {
+      type: 'object',
+      properties: {},
+    },
+  },
+  {
+    name: 'ha_create_zone',
+    description: '[WRITE] Create a new zone for presence detection. MODIFIES configuration.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          description: 'Zone name (e.g., "Office")',
+        },
+        latitude: {
+          type: 'number',
+          description: 'Zone center latitude',
+        },
+        longitude: {
+          type: 'number',
+          description: 'Zone center longitude',
+        },
+        radius: {
+          type: 'number',
+          description: 'Zone radius in meters (default: 100)',
+        },
+        icon: {
+          type: 'string',
+          description: 'MDI icon (e.g., "mdi:office-building")',
+        },
+      },
+      required: ['name', 'latitude', 'longitude'],
+    },
+  },
+  {
+    name: 'ha_delete_zone',
+    description: '[WRITE] Delete a zone. MODIFIES configuration.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        zone_id: {
+          type: 'string',
+          description: 'Zone ID to delete',
+        },
+      },
+      required: ['zone_id'],
     },
   },
 

@@ -6,10 +6,32 @@
 export const dashboardTools = [
   {
     name: 'ha_analyze_entities_for_dashboard',
-    description: '[READ-ONLY] Get complete entity list for AI-driven dashboard generation. Returns entities grouped by domain with attributes. AI will use this data to generate custom dashboard based on user requirements. Safe operation - only reads data.',
+    description: '[READ-ONLY] Get entities for AI-driven dashboard generation with pagination/filtering. Safe operation - only reads data. Use summary_only=true to reduce payload; if has_next=true, request next page.',
     inputSchema: {
       type: 'object',
-      properties: {},
+      properties: {
+        domains: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Optional domain filters (e.g., ["climate", "light"])',
+        },
+        summary_only: {
+          type: 'boolean',
+          description: 'If true, return lightweight entity summary instead of full state objects',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Entities per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
+        },
+      },
     },
   },
   {

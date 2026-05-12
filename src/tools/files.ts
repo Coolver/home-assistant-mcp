@@ -5,7 +5,7 @@
 export const fileTools = [
   {
     name: 'ha_read_file',
-    description: '[READ-ONLY] Read and display linter errors from the current workspace. You can provide paths to specific files or directories, or omit the argument to get diagnostics for all files.\n\n- If a file path is provided, returns diagnostics for that file only\n- If a directory path is provided, returns diagnostics for all files within that directory\n- If no path is provided, returns diagnostics for all files in the workspace\n- This tool can return linter errors that were already present before your edits, so avoid calling it with a very wide scope of files\n- NEVER call this tool on a file unless you\'ve edited it or are about to edit it',
+    description: '[READ-ONLY] Read a file from Home Assistant configuration directory. Safe operation - only reads data.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -19,7 +19,7 @@ export const fileTools = [
   },
   {
     name: 'ha_write_file',
-    description: '[WRITE] Write content to a file in Home Assistant. MODIFIES configuration - requires approval.',
+    description: '[WRITE] Write content to a file in Home Assistant. MODIFIES configuration - requires approval. Provide a meaningful description of what and why you are changing (e.g., "Add motion sensor automation", "Fix temperature threshold", "Update dashboard layout").',
     inputSchema: {
       type: 'object',
       properties: {
@@ -31,19 +31,39 @@ export const fileTools = [
           type: 'string',
           description: 'Content to write to the file',
         },
+        description: {
+          type: 'string',
+          description: 'Optional: Human-readable description of what and why you are changing (e.g., "Add automation for motion sensor light control", "Fix temperature threshold in climate automation", "Update dashboard to show new sensors"). This will be used in Git commit message.',
+        },
       },
       required: ['path', 'content'],
     },
   },
   {
     name: 'ha_list_files',
-    description: '[READ-ONLY] List files and directories in Home Assistant. Safe operation - only reads data.',
+    description: '[READ-ONLY] List files and directories in Home Assistant with pagination support. Safe operation - only reads data. Default page_size is 250; if response has has_next=true, request next page.',
     inputSchema: {
       type: 'object',
       properties: {
         directory: {
           type: 'string',
           description: 'Directory path relative to /config (default: "/")',
+        },
+        pattern: {
+          type: 'string',
+          description: 'File glob pattern to filter results (default: "*.yaml"). Use "*" to list all files, "*.mdc" for Cursor rules, etc.',
+        },
+        page: {
+          type: 'number',
+          description: 'Page number (1-based, default 1)',
+        },
+        page_size: {
+          type: 'number',
+          description: 'Files per page (default 250, max 500)',
+        },
+        full_list: {
+          type: 'boolean',
+          description: 'If true, return full list without pagination',
         },
       },
     },

@@ -6,10 +6,25 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { HAClient } from './ha-client.js';
 import { tools } from './tools/index.js';
 import { toolHandlers } from './handlers.js';
 import { normalizeToolArgs } from './arg-normalizer.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+let MCP_VERSION = '0.0.0';
+try {
+  const packagePath = join(__dirname, '..', 'package.json');
+  const packageJson = JSON.parse(readFileSync(packagePath, 'utf-8'));
+  MCP_VERSION = packageJson.version;
+} catch {
+  // fallback if package.json unreadable
+}
 
 // Get configuration from environment
 const HA_AGENT_URL = process.env.HA_AGENT_URL || 'http://homeassistant.local:8099';
@@ -33,7 +48,7 @@ const haClient = new HAClient({
 const server = new Server(
   {
     name: 'home-assistant-mcp',
-    version: '3.2.27',
+    version: MCP_VERSION,
   },
   {
     capabilities: {
@@ -127,9 +142,17 @@ async function main() {
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  // Only log startup message if DEBUG mode is enabled
+
+  // Graceful shutdown
+  const shutdown = async () => {
+    await server.close();
+    process.exit(0);
+  };
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
+
   if (process.env.DEBUG === 'true') {
-    console.error('🚀 MCP Home Assistant server running');
+    console.error('MCP Home Assistant server running');
   }
 }
 

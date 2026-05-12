@@ -56,6 +56,7 @@ export class HAClient {
 
   async listFiles(options?: {
     directory?: string;
+    pattern?: string;
     page?: number;
     page_size?: number;
     full_list?: boolean;
@@ -77,6 +78,8 @@ export class HAClient {
   async listEntities(options?: {
     domain?: string;
     search?: string;
+    fuzzy?: boolean;
+    fuzzy_threshold?: number;
     page?: number;
     page_size?: number;
     ids_only?: boolean;
@@ -387,7 +390,9 @@ export class HAClient {
   }
 
   async reloadConfig(component: string = 'all'): Promise<any> {
-    const response = await this.client.post(`/api/system/reload?component=${component}`);
+    const response = await this.client.post(`/api/system/reload`, null, {
+      params: { component },
+    });
     return response.data;
   }
 
@@ -398,10 +403,103 @@ export class HAClient {
     return response.data;
   }
 
+  async getRepairs(): Promise<any> {
+    const response = await this.client.get(`/api/system/repairs`);
+    return response.data;
+  }
+
+  async getSnapshot(options?: {
+    include?: string;
+    domains?: string;
+    area_id?: string;
+    summary_only?: boolean;
+  }): Promise<any> {
+    const params: any = {};
+    if (options?.include) params.include = options.include;
+    if (options?.domains) params.domains = options.domains;
+    if (options?.area_id) params.area_id = options.area_id;
+    if (options?.summary_only !== undefined) params.summary_only = options.summary_only;
+    const response = await this.client.get(`/api/snapshot`, { params });
+    return response.data;
+  }
+
   async getLogbookEntries(params: Record<string, any> = {}): Promise<any> {
     const response = await this.client.get(`/api/logbook`, {
       params,
     });
+    return response.data;
+  }
+
+  // History & Statistics
+  async getHistory(entityId: string, start?: string, end?: string, minimalResponse?: boolean): Promise<any> {
+    const params: any = { entity_id: entityId };
+    if (start) params.start = start;
+    if (end) params.end = end;
+    if (minimalResponse !== undefined) params.minimal_response = minimalResponse;
+    const response = await this.client.get(`/api/history/list`, { params });
+    return response.data;
+  }
+
+  async getStatistics(entityId: string, period?: string, start?: string, end?: string): Promise<any> {
+    const params: any = { entity_id: entityId };
+    if (period) params.period = period;
+    if (start) params.start = start;
+    if (end) params.end = end;
+    const response = await this.client.get(`/api/history/statistics`, { params });
+    return response.data;
+  }
+
+  // Blueprints
+  async listBlueprints(domain?: string): Promise<any> {
+    const response = await this.client.get(`/api/blueprints/list`, { params: { domain: domain || 'automation' } });
+    return response.data;
+  }
+
+  async importBlueprint(url: string): Promise<any> {
+    const response = await this.client.post(`/api/blueprints/import`, { url });
+    return response.data;
+  }
+
+  // Calendar & Todo
+  async listCalendars(): Promise<any> {
+    const response = await this.client.get(`/api/calendar/list`);
+    return response.data;
+  }
+
+  async getCalendarEvents(entityId: string, start?: string, end?: string): Promise<any> {
+    const params: any = { entity_id: entityId };
+    if (start) params.start = start;
+    if (end) params.end = end;
+    const response = await this.client.get(`/api/calendar/events`, { params });
+    return response.data;
+  }
+
+  async listTodos(entityId: string): Promise<any> {
+    const response = await this.client.get(`/api/calendar/todos`, { params: { entity_id: entityId } });
+    return response.data;
+  }
+
+  async createTodo(entityId: string, item: string): Promise<any> {
+    const response = await this.client.post(`/api/calendar/todos/create`, { entity_id: entityId, item });
+    return response.data;
+  }
+
+  // Zones
+  async listZones(): Promise<any> {
+    const response = await this.client.get(`/api/zones/list`);
+    return response.data;
+  }
+
+  async createZone(name: string, latitude: number, longitude: number, radius?: number, icon?: string): Promise<any> {
+    const data: any = { name, latitude, longitude };
+    if (radius) data.radius = radius;
+    if (icon) data.icon = icon;
+    const response = await this.client.post(`/api/zones/create`, data);
+    return response.data;
+  }
+
+  async deleteZone(zoneId: string): Promise<any> {
+    const response = await this.client.delete(`/api/zones/delete`, { params: { zone_id: zoneId } });
     return response.data;
   }
 

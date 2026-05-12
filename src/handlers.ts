@@ -429,6 +429,16 @@ export const toolHandlers: Record<string, ToolHandler> = {
     return jsonResponse(result);
   },
 
+  'ha_get_repairs': async (client, args) => {
+    const result = await client.getRepairs();
+    return jsonResponse(result);
+  },
+
+  'ha_get_snapshot': async (client, args) => {
+    const result = await client.getSnapshot(args);
+    return jsonResponse(result);
+  },
+
   'ha_logbook_entries': async (client, args) => {
     const result = await client.getLogbookEntries(args || {});
     return jsonResponse(result);
@@ -594,6 +604,65 @@ export const toolHandlers: Record<string, ToolHandler> = {
       serviceData,
       args.target
     );
+    return jsonResponse(result);
+  },
+
+  // History & Statistics
+  'ha_get_history': async (client, args) => {
+    const result = await client.getHistory(args.entity_id, args.start, args.end, args.minimal_response);
+    return jsonResponse(result);
+  },
+
+  'ha_get_statistics': async (client, args) => {
+    const result = await client.getStatistics(args.entity_id, args.period, args.start, args.end);
+    return jsonResponse(result);
+  },
+
+  // Blueprints
+  'ha_list_blueprints': async (client, args) => {
+    const result = await client.listBlueprints(args.domain);
+    return jsonResponse(result);
+  },
+
+  'ha_import_blueprint': async (client, args) => {
+    const result = await client.importBlueprint(args.url);
+    return jsonResponse(result);
+  },
+
+  // Calendar & Todo
+  'ha_list_calendars': async (client, args) => {
+    const result = await client.listCalendars();
+    return jsonResponse(result);
+  },
+
+  'ha_get_calendar_events': async (client, args) => {
+    const result = await client.getCalendarEvents(args.entity_id, args.start, args.end);
+    return jsonResponse(result);
+  },
+
+  'ha_list_todos': async (client, args) => {
+    const result = await client.listTodos(args.entity_id);
+    return jsonResponse(result);
+  },
+
+  'ha_create_todo': async (client, args) => {
+    const result = await client.createTodo(args.entity_id, args.item);
+    return jsonResponse(result);
+  },
+
+  // Zones
+  'ha_list_zones': async (client, args) => {
+    const result = await client.listZones();
+    return jsonResponse(result);
+  },
+
+  'ha_create_zone': async (client, args) => {
+    const result = await client.createZone(args.name, args.latitude, args.longitude, args.radius, args.icon);
+    return jsonResponse(result);
+  },
+
+  'ha_delete_zone': async (client, args) => {
+    const result = await client.deleteZone(args.zone_id);
     return jsonResponse(result);
   },
 
