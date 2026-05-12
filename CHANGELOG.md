@@ -2,9 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.2.29] - 2026-05-12
+## [3.2.30] - 2026-05-12
 
-**Pair with Vibecode Agent 2.10.45+.**
+**Pair with Vibecode Agent 2.10.46+.**
 
 ### 13 new tools
 
