@@ -279,8 +279,79 @@ export const tools: Tool[] = [
           items: { type: 'string' },
           description: 'Aliases for entity',
         },
+        labels: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Label ids. Replaces the entity\'s full label set. Pass [] to clear. Get ids from Home Assistant, do not invent them.',
+        },
+        categories: {
+          type: 'object',
+          additionalProperties: { type: 'string' },
+          description: 'Scope to category_id, e.g. {"automation": "<id>"} or {"script": "<id>"}. Only scopes you send are changed. List ids with ha_list_categories first.',
+        },
       },
       required: ['entity_id'],
+    },
+  },
+  {
+    name: 'ha_list_categories',
+    description: '[READ-ONLY] List Home Assistant categories for a scope (automation, script, helpers). Use the returned category_id when setting categories on an entity. Safe operation - only reads data.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        scope: {
+          type: 'string',
+          description: 'Optional scope filter: automation, script, helpers, or another category scope',
+        },
+      },
+    },
+  },
+  {
+    name: 'ha_create_category',
+    description: '[WRITE] Create a category in a scope (automation, script, helpers). Returns the new category_id. MODIFIES category registry - requires approval.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        scope: {
+          type: 'string',
+          description: 'Category scope, e.g. automation, script, helpers',
+        },
+        name: {
+          type: 'string',
+          description: 'Display name',
+        },
+        icon: {
+          type: 'string',
+          description: 'Optional mdi icon',
+        },
+      },
+      required: ['scope', 'name'],
+    },
+  },
+  {
+    name: 'ha_update_category',
+    description: '[WRITE] Rename a category or change its icon. MODIFIES category registry - requires approval.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        scope: {
+          type: 'string',
+          description: 'Category scope',
+        },
+        category_id: {
+          type: 'string',
+          description: 'Category id from ha_list_categories',
+        },
+        name: {
+          type: 'string',
+          description: 'New display name',
+        },
+        icon: {
+          type: 'string',
+          description: 'New mdi icon',
+        },
+      },
+      required: ['scope', 'category_id'],
     },
   },
   {
@@ -824,7 +895,7 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_create_checkpoint',
-    description: '[WRITE] Create checkpoint with tag at the start of user request processing. This should be called automatically at the beginning of each user request to save current state before making changes. Creates a commit and tag with timestamp and user request description. Disables auto-commits during request processing.',
+    description: '[WRITE] Save the current configuration before making changes, with a tag and the user request description. Call at the start of a request. Edits made afterwards are still committed on their own.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -838,7 +909,7 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_end_checkpoint',
-    description: '[WRITE] End request processing checkpoint. Re-enables auto-commits. Should be called at the end of user request processing.',
+    description: '[WRITE] Close the open checkpoint and commit any changes still waiting. Call at the end of a request. A missed call does not drop edits: each write is committed as it happens.',
     inputSchema: {
       type: 'object',
       properties: {},
@@ -895,7 +966,7 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_get_logs',
-    description: '[READ-ONLY] Get agent logs to troubleshoot issues. Safe operation - only reads data.',
+    description: '[READ-ONLY] Get this add-on\'s own log (its connection and API chatter). For the Home Assistant Core log shown in Settings → System → Logs, use ha_core_logs. Safe operation - only reads data.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -907,6 +978,29 @@ export const tools: Tool[] = [
           type: 'string',
           description: 'Filter by log level: DEBUG, INFO, WARNING, ERROR (optional)',
           enum: ['DEBUG', 'INFO', 'WARNING', 'ERROR'],
+        },
+      },
+    },
+  },
+  {
+    name: 'ha_core_logs',
+    description: '[READ-ONLY] Read the Home Assistant journal from Supervisor: Core (Settings → System → Logs), the Supervisor, or the host OS. Default source is core. level keeps that level and above plus the following traceback. host is the OS journal and is noisy. Not available outside Home Assistant OS. Safe operation - only reads data.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        source: {
+          type: 'string',
+          description: 'Which journal to read. Default: core',
+          enum: ['core', 'supervisor', 'host'],
+        },
+        lines: {
+          type: 'number',
+          description: 'How many recent lines to fetch (default 100, max 500)',
+        },
+        level: {
+          type: 'string',
+          description: 'Optional minimum level. WARNING keeps warnings, errors, and critical lines.',
+          enum: ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
         },
       },
     },
@@ -1002,7 +1096,7 @@ export const tools: Tool[] = [
   },
   {
     name: 'ha_uninstall_hacs',
-    description: '[WRITE] Uninstall HACS (Home Assistant Community Store). Removes HACS directory, storage files, and restarts Home Assistant. DESTRUCTIVE - requires approval!',
+    description: '[WRITE] Uninstall HACS itself (the whole Community Store). Removes the HACS directory and storage files, then restarts Home Assistant. To remove one integration, theme, or dashboard card, use ha_hacs_remove_repository instead. DESTRUCTIVE - requires approval!',
     inputSchema: {
       type: 'object',
       properties: {},
@@ -1060,6 +1154,20 @@ export const tools: Tool[] = [
           type: 'string',
           description: 'Repository category: integration, theme, plugin, appdaemon, netdaemon, python_script (default: integration)',
           enum: ['integration', 'theme', 'plugin', 'appdaemon', 'netdaemon', 'python_script'],
+        },
+      },
+      required: ['repository'],
+    },
+  },
+  {
+    name: 'ha_hacs_remove_repository',
+    description: '[WRITE] Remove one installed HACS repository, the same as the HACS Remove button. Deletes the downloaded files and, for a dashboard card, its Lovelace resource. Does not uninstall HACS and does not delete an integration config entry. Pass the same author/name used to install it. DESTRUCTIVE - requires approval.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        repository: {
+          type: 'string',
+          description: 'Repository full name (e.g. "author/card-name") or the HACS repository_id from ha_hacs_list_repositories',
         },
       },
       required: ['repository'],
@@ -1435,7 +1543,7 @@ export const tools: Tool[] = [
 
   {
     name: 'ha_call_service',
-    description: '[WRITE] Call a Home Assistant service. MODIFIES system state - requires approval. Examples: number.set_value, light.turn_on, climate.set_temperature, switch.turn_on, etc.',
+    description: '[WRITE] Call a Home Assistant service. MODIFIES system state - requires approval. Examples: number.set_value, light.turn_on, climate.set_temperature, switch.turn_on. For a service whose result is the data it returns (weather.get_forecasts, calendar.get_events, todo.get_items, or any action that requires a response), set return_response true or the result is dropped.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -1462,6 +1570,10 @@ export const tools: Tool[] = [
         wait_timeout: {
           type: 'number',
           description: 'Max seconds to wait for state change (default 10). Only used with wait_for_state.',
+        },
+        return_response: {
+          type: 'boolean',
+          description: 'Ask Home Assistant to return the service response. Required for weather.get_forecasts, calendar.get_events, todo.get_items, and services that refuse a caller that does not accept a response.',
         },
       },
       required: ['domain', 'service'],

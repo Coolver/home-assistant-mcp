@@ -223,6 +223,21 @@ export const toolHandlers: Record<string, ToolHandler> = {
     return jsonResponse(result);
   },
 
+  'ha_list_categories': async (client, args) => {
+    const result = await client.listCategories(args.scope);
+    return jsonResponse(result);
+  },
+
+  'ha_create_category': async (client, args) => {
+    const result = await client.createCategory(args.scope, args.name, args.icon);
+    return jsonResponse(result);
+  },
+
+  'ha_update_category': async (client, args) => {
+    const result = await client.updateCategory(args.scope, args.category_id, args.name, args.icon);
+    return jsonResponse(result);
+  },
+
   'ha_remove_entity_registry_entry': async (client, args) => {
     const result = await client.removeEntityRegistryEntry(args.entity_id);
     return jsonResponse(result);
@@ -429,6 +444,11 @@ export const toolHandlers: Record<string, ToolHandler> = {
     return jsonResponse(result);
   },
 
+  'ha_core_logs': async (client, args) => {
+    const result = await client.getCoreLogs(args.source, args.lines, args.level);
+    return jsonResponse(result);
+  },
+
   'ha_get_repairs': async (client, args) => {
     const result = await client.getRepairs();
     return jsonResponse(result);
@@ -467,6 +487,11 @@ export const toolHandlers: Record<string, ToolHandler> = {
 
   'ha_hacs_install_repository': async (client, args) => {
     const result = await client.hacsInstallRepository(args.repository, args.category);
+    return jsonResponse(result);
+  },
+
+  'ha_hacs_remove_repository': async (client, args) => {
+    const result = await client.hacsRemoveRepository(args.repository);
     return jsonResponse(result);
   },
 
@@ -602,7 +627,12 @@ export const toolHandlers: Record<string, ToolHandler> = {
       args.domain,
       args.service,
       serviceData,
-      args.target
+      args.target,
+      {
+        returnResponse: args.return_response,
+        waitForState: args.wait_for_state,
+        waitTimeout: args.wait_timeout,
+      }
     );
     return jsonResponse(result);
   },

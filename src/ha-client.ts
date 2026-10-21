@@ -147,6 +147,32 @@ export class HAClient {
     return response.data;
   }
 
+  async listCategories(scope?: string): Promise<any> {
+    const response = await this.client.get(`/api/registries/categories/list`, {
+      params: scope ? { scope } : {},
+    });
+    return response.data;
+  }
+
+  async createCategory(scope: string, name: string, icon?: string): Promise<any> {
+    const response = await this.client.post(`/api/registries/categories/create`, {
+      scope,
+      name,
+      ...(icon ? { icon } : {}),
+    });
+    return response.data;
+  }
+
+  async updateCategory(scope: string, categoryId: string, name?: string, icon?: string): Promise<any> {
+    const response = await this.client.post(`/api/registries/categories/update`, {
+      scope,
+      category_id: categoryId,
+      ...(name ? { name } : {}),
+      ...(icon ? { icon } : {}),
+    });
+    return response.data;
+  }
+
   async removeEntityRegistryEntry(entityId: string): Promise<any> {
     const response = await this.client.post(`/api/registries/entities/remove`, {
       entity_id: entityId,
@@ -403,6 +429,17 @@ export class HAClient {
     return response.data;
   }
 
+  async getCoreLogs(source: string = 'core', lines: number = 100, level?: string): Promise<any> {
+    const response = await this.client.get(`/api/logs/journal`, {
+      params: {
+        source,
+        lines,
+        ...(level ? { level } : {}),
+      },
+    });
+    return response.data;
+  }
+
   async getRepairs(): Promise<any> {
     const response = await this.client.get(`/api/system/repairs`);
     return response.data;
@@ -538,6 +575,11 @@ export class HAClient {
 
   async hacsInstallRepository(repository: string, category: string = 'integration'): Promise<any> {
     const response = await this.client.post(`/api/hacs/install_repository`, { repository, category });
+    return response.data;
+  }
+
+  async hacsRemoveRepository(repository: string): Promise<any> {
+    const response = await this.client.post(`/api/hacs/remove_repository`, { repository });
     return response.data;
   }
 
@@ -712,12 +754,21 @@ export class HAClient {
   }
 
   // Service API
-  async callService(domain: string, service: string, serviceData?: any, target?: any): Promise<any> {
+  async callService(
+    domain: string,
+    service: string,
+    serviceData?: any,
+    target?: any,
+    options?: { returnResponse?: boolean; waitForState?: string; waitTimeout?: number },
+  ): Promise<any> {
     const response = await this.client.post(`/api/entities/call_service`, {
       domain,
       service,
       service_data: serviceData,
       target: target,
+      ...(options?.returnResponse ? { return_response: true } : {}),
+      ...(options?.waitForState ? { wait_for_state: options.waitForState } : {}),
+      ...(options?.waitTimeout !== undefined ? { wait_timeout: options.waitTimeout } : {}),
     });
     return response.data;
   }

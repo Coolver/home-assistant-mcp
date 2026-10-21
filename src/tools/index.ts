@@ -13,7 +13,7 @@ import { tools as allTools } from '../tools.js';
 
 const migratedToolNames = [
   'ha_read_file', 'ha_write_file', 'ha_list_files', 'ha_delete_file',
-  'ha_check_config', 'ha_reload_config', 'ha_restart', 'ha_get_logs',
+  'ha_check_config', 'ha_reload_config', 'ha_restart', 'ha_get_logs', 'ha_core_logs',
   'ha_analyze_entities_for_dashboard', 'ha_preview_dashboard', 'ha_apply_dashboard', 'ha_delete_dashboard',
 ];
 

@@ -36,7 +36,7 @@ export const systemTools = [
   },
   {
     name: 'ha_get_logs',
-    description: '[READ-ONLY] Get agent logs to troubleshoot issues. Safe operation - only reads data.',
+    description: '[READ-ONLY] Get this add-on\'s own log (its connection and API chatter). For the Home Assistant Core log shown in Settings → System → Logs, use ha_core_logs. Safe operation - only reads data.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -48,6 +48,29 @@ export const systemTools = [
           type: 'string',
           description: 'Filter by log level: DEBUG, INFO, WARNING, ERROR (optional)',
           enum: ['DEBUG', 'INFO', 'WARNING', 'ERROR'],
+        },
+      },
+    },
+  },
+  {
+    name: 'ha_core_logs',
+    description: '[READ-ONLY] Read the Home Assistant journal from Supervisor: Core (Settings → System → Logs), the Supervisor, or the host OS. Default source is core. level keeps that level and above plus the following traceback. host is the OS journal and is noisy. Not available outside Home Assistant OS. Safe operation - only reads data.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        source: {
+          type: 'string',
+          description: 'Which journal to read. Default: core',
+          enum: ['core', 'supervisor', 'host'],
+        },
+        lines: {
+          type: 'number',
+          description: 'How many recent lines to fetch (default 100, max 500)',
+        },
+        level: {
+          type: 'string',
+          description: 'Optional minimum level. WARNING keeps warnings, errors, and critical lines.',
+          enum: ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
         },
       },
     },

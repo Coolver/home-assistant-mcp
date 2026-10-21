@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.32] - 2026-10-22
+
+**Pair with Vibecode Agent 2.10.49.**
+
+The editor side of the 2.10.49 add-on. New tools: Home Assistant Core logs, labels and categories, creating and renaming a category, removing one HACS repository, and `return_response` on a service call so a forecast or a calendar actually comes back. `wait_for_state` is passed through as well. `ha_get_logs` is described as this add-on's own log, so it is no longer mistaken for the Core log.
+
+The reports behind these tools are thanked in the add-on changelog.
+
 ## [3.2.31] - 2026-05-12
 
 **Pair with Vibecode Agent 2.10.46+.**
